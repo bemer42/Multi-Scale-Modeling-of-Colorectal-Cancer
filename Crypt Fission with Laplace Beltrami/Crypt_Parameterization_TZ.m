@@ -1,37 +1,38 @@
 % A function to define the crypt domain using a parameterization
-% in theta and z:
-close all, clear all, clc;
+% in theta and z.  This file can also craete a partiall split or fully
+% split crypt by varying the parameter c. 
+clear; close all; clc;
 
 % Mesh parameters:
 N_theta = 100;
 N_z     = 100;
 
-% Splitting function with parametrs:
+% Splitting function witdh parametrs:
 b = .25;
-A = @(z,L) 1 - 1./(1+exp(-b*(z-L)));
-g = @(theta,z,L) 1 - A(z,L) + 2*A(z,L).*sin(theta).^2;
+A = @(z,c) 1 - 1./(1+exp(-b*(z-c)));
+g = @(theta,z,c) 1 - A(z,c) + 2*A(z,c).*sin(theta).^2;
 
 % Radius function with parameters:
 r_b = 41/2/pi;
 r_t = 10/pi;
 a   = .3;
-c   = 78;
-R = @(theta,z,L) g(theta,z,L).*(r_b*(1-exp(-a*z)) + r_t*exp(a*(z-c)));
+L   = 78;
+R = @(theta,z,c) g(theta,z,c).*(r_b*(1-exp(-a*z)) + r_t*exp(a*(z-L)));
 
 % Mesh:
 theta = linspace(eps,2*pi,N_theta);
-z     = linspace(0,c,N_z);
+z     = linspace(0,L,N_z);
 [T,Z] = meshgrid(theta,z);
 
-% Define splitting parameter, L: 
-% L = 60;
+% Define splitting parameter, c: 
+% c = 60;
 
-for L = -2:.5:90
+for c = -2:.5:90
 
 % Plot:
 figure(1)
 subplot(1,2,1)
-surf(Z,T,R(T,Z,L))
+surf(Z,T,R(T,Z,c))
 set(gca,'fontsize',20)
 set(gcf,'WindowState','maximized')
 title('Plot of $r(\theta,z)$','fontsize',30,'interpreter','latex')
@@ -42,7 +43,7 @@ view([1 -1 1])
 grid on; grid minor
 shading interp; camlight; lighting phong
 subplot(1,2,2)
-mesh(R(T,Z,L).*cos(T),R(T,Z,L).*sin(T),Z)
+mesh(R(T,Z,c).*cos(T),R(T,Z,c).*sin(T),Z)
 set(gca,'fontsize',20)
 set(gcf,'WindowState','maximized')
 title('Plot of Crypt Domain','fontsize',30,'interpreter','latex')
@@ -56,7 +57,7 @@ view([-1 1 1])
 grid on; grid minor
 shading interp; camlight; lighting phong
 
-if L == -2
+if c == -2
     pause
 else
     pause(.1)

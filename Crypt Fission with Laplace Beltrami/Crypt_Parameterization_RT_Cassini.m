@@ -1,5 +1,5 @@
 % A function to define the crypt domain using a parameterization
-% in r and theta with the Cassini splitting maechaniz:
+% in r and theta with the Cassini splitting mechanism:
 close all, clear all, clc;
 
 % Mesh parameters:
